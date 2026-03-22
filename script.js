@@ -26,9 +26,19 @@ async function getJson(path) {
 }
 
 function filterRoles(roles, ids) {
-    return roles.filter(role => 
-        (ids ?? []).includes(role?.properties?.ID?.rich_text?.[0]?.plain_text)
-    )
+    return ids
+        .map(id => roles
+            .find(role => role?.properties?.ID?.rich_text?.[0]?.plain_text === id))
+        .filter(role => !!role)
+}
+
+function reorderRoles(roles) {
+    const half = Math.ceil(roles.length / 2);
+
+    return Array.from({ length: roles.length + roles.length % 2 }, (_, i) => {
+        if (i % 2 === 0) return roles[i / 2];
+        return roles[(i - 1) / 2 + half]
+    })
 }
 
 function filterRolesByType(roles, typeId) {
@@ -44,14 +54,19 @@ function renderTitle(title) {
 function renderRoles(roles, types) {
     Object.entries(types).forEach(([id, name]) => {
         const rolesByType = filterRolesByType(roles, id)
-        renderRoleType(rolesByType, name)
+        renderRoleType(rolesByType, name, id)
     })
 }
 
-function renderRoleType(roles, name) {
+function renderRoleType(roles, name, id) {
     if (roles.length === 0) return
 
     const section = document.createElement('section')
+
+    if (['2bfc6e58-485f-8006-9d07-fe360e067c6b', '2bfc6e58-485f-804b-a4f2-fe76108367bc'].includes(id))
+        section.classList.add('good')
+    if (['2bfc6e58-485f-80b4-b28c-d3f87189b821', '2bfc6e58-485f-8059-b37f-d6cffbccbf6c'].includes(id))
+        section.classList.add('evil')
   
     section.appendChild(renderTypeTitle(name))
     section.appendChild(renderRoleList(roles))
@@ -68,8 +83,10 @@ function renderTypeTitle(name) {
 
 function renderRoleList(roles) {
     const list = document.createElement('ul')
+    const orderedRoles = reorderRoles(roles)
 
-    for (const role of roles) {
+    for (const role of orderedRoles) {
+        if (!role) continue
         const item = document.createElement('li')
 
         const icon = document.createElement('img')
