@@ -6,13 +6,47 @@
     <link rel="stylesheet" href="./style.css">
 </head>
 <body>
+    <input id="options-background" class="no-print" type="checkbox" checked />
+    <label for="options-background" class="no-print">Фон</label>
+    
+    <input id="options-columns-1" name="columns" class="no-print" type="radio"  />
+    <label for="options-columns-1" class="no-print">1 колонка</label>
+    <input id="options-columns-2" name="columns" class="no-print" type="radio" checked />
+    <label for="options-columns-2" class="no-print">2 колонки</label>
+
+    <button class="no-print" onclick="window.print()">Печать</button>
+    
     <div class="page">
         <h1 id="script-title"></h1>
         <p id="script-not-first-night">* Не в первую ночь</p>
     </div>
 
     <div class="page">
+        <table id="players-count">
+            <thead>
+                <tr class="players">
+                    <th>ИГРОКИ</th><th>5</th><th>6</th><th>7</th><th>8</th><th>9</th><th>10</th><th>11</th><th>12</th><th>13</th><th>14</th><th>15+</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="good">
+                    <th>ГОРОЖАНЕ</th><td>3</td><td>3</td><td>5</td><td>5</td><td>5</td><td>7</td><td>7</td><td>7</td><td>9</td><td>9</td><td>9</td>
+                </tr>
+                <tr class="good">
+                    <th>ИЗГОИ</th><td>0</td><td>1</td><td>0</td><td>1</td><td>2</td><td>0</td><td>1</td><td>2</td><td>0</td><td>1</td><td>2</td>
+                </tr>
+                <tr class="evil">
+                    <th>ПРИСПЕШНИКИ</th><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>2</td><td>2</td><td>2</td><td>3</td><td>3</td><td>3</td>
+                </tr>
+                <tr class="evil">
+                    <th>ДЕМОНЫ</th><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 
+    <div class="page">
+        
     </div>
 
     <script src="./script.js"></script>

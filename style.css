@@ -3,6 +3,9 @@
         -webkit-print-color-adjust: exact;
         print-color-adjust: exact;
     }
+    .no-print {
+        display: none;
+    }
 }
 
 @page {
@@ -25,8 +28,13 @@
 html, body {
     margin: 0;
     padding: 0;
-    background: #F4F2EB;
     font-family: 'Petersburg';
+}
+
+#options-background:checked ~ .page {
+    background: #F4F2EB url('./images/textures/paper.webp');
+    background-size: 210mm 297mm;
+    background-position: top left;
 }
 
 .page {
@@ -36,11 +44,7 @@ html, body {
     width: 210mm;
     min-height: 297mm;
     height: 297mm;
-    padding: 2mm 8mm;
-
-    background: #F4F2EB url('./images/textures/paper.webp');
-    background-size: 210mm 297mm;
-    background-position: top left;
+    padding: 8mm;
 
     break-after: page;
     page-break-after: always;
@@ -52,11 +56,11 @@ html, body {
     font-weight: 300;
     font-size: 3.5mm;
     right: 8mm;
-    top: 10mm;
+    top: 16mm;
 }
 
 h1 {
-    margin-bottom: 2mm;
+    margin: 2mm 0;
 }
 
 .page:first-of-type {
@@ -74,12 +78,18 @@ section:first-of-type {
     flex-grow: 3;
 }
 
-section.good h3 {
+section.good h3,
+#players-count .good {
     color: #06B;
 }
 
-section.evil h3 {
+section.evil h3,
+#players-count .evil {
     color: #A21;
+}
+
+#players-count .players {
+    color: #764;
 }
 
 h2 {
@@ -102,12 +112,15 @@ h2::after {
 
 ul {
     list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+section ul {
     align-items: stretch;
     display: flex;
     flex-grow: 1;
     flex-wrap: wrap;
-    margin: 0;
-    padding: 0;
 }
 
 li {
@@ -142,4 +155,52 @@ li > p {
     font-family: 'Roboto-Condensed';
     font-weight: 300;
     font-size: 3.5mm;
+}
+
+
+#options-columns-1:checked ~ .page li {
+    width: 200mm;
+    grid-template-columns: 10mm 26mm auto;
+    grid-template-rows: auto;
+    column-gap: 1mm;
+    order: initial !important;
+}
+#options-columns-1:checked ~ .page li img {
+    grid-column: 1;
+    grid-row: 1;
+    width: 8mm;
+}
+#options-columns-1:checked ~ .page li h3 {
+    grid-column: 2;
+    grid-row: 1;
+    align-self: center;
+}
+#options-columns-1:checked ~ .page li p {
+    grid-column: 3;
+    grid-row: 1;
+    align-self: center;
+}
+
+#players-count {
+    border-collapse: collapse;
+    width: 170mm;
+    margin: 10mm;
+    text-align: center;
+}
+
+#players-count {
+    border: 6px double #764;
+}
+
+#players-count th,
+#players-count td {
+    width: 10mm;
+    height: 10mm;
+    font-size: 6mm;
+    font-weight: 900;
+}
+
+#players-count th:first-of-type {
+    font-size: 4mm;
+    text-align: right;
 }

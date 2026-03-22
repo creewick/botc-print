@@ -3,9 +3,11 @@ async function onInit() {
     const roles = await getJson('./roles.json')
     const types = await getJson('./types.json')
     const filteredRoles = filterRoles(roles, ids)
+    const systemRoles = filterRolesByType(roles, undefined)
 
     renderTitle(title)
     renderRoles(filteredRoles, types)
+    renderNightOrder([...filteredRoles, ...systemRoles])
 }
 
 function parseQuery() {
@@ -30,15 +32,6 @@ function filterRoles(roles, ids) {
         .map(id => roles
             .find(role => role?.properties?.ID?.rich_text?.[0]?.plain_text === id))
         .filter(role => !!role)
-}
-
-function reorderRoles(roles) {
-    const half = Math.ceil(roles.length / 2);
-
-    return Array.from({ length: roles.length + roles.length % 2 }, (_, i) => {
-        if (i % 2 === 0) return roles[i / 2];
-        return roles[(i - 1) / 2 + half]
-    })
 }
 
 function filterRolesByType(roles, typeId) {
@@ -83,11 +76,12 @@ function renderTypeTitle(name) {
 
 function renderRoleList(roles) {
     const list = document.createElement('ul')
-    const orderedRoles = reorderRoles(roles)
 
-    for (const role of orderedRoles) {
+    for (let index = 0; index < roles.length; index++) {
+        const role = roles[index]
         if (!role) continue
         const item = document.createElement('li')
+        item.style.order = getRoleOrder(index, roles.length)
 
         const icon = document.createElement('img')
         const id = role.properties?.ID?.rich_text?.[0]?.plain_text
@@ -107,5 +101,44 @@ function renderRoleList(roles) {
     
     return list
 } 
+
+function getRoleOrder(index, total) {
+    const half = Math.ceil(total / 2)
+
+    if (index < half) {
+        return index * 2
+    }
+
+    return (index - half) * 2 + 1
+}
+
+function renderNightOrder(roles) {
+    const firstNight = getNightOrderList(roles, "Первая ночь порядок")
+    document.getElementsByClassName('page')[2].appendChild(firstNight)
+}
+
+function getNightOrderList(roles, key) {
+    const list = document.createElement('ul')
+    const filteredRoles = roles
+        .filter(a => a?.properties?.[key]?.number !== null)
+        .sort((a, b) => a?.properties?.[key]?.number - b?.properties?.[key]?.number)
+
+    for (const role of filteredRoles) {
+        const item = document.createElement('li')
+
+        const icon = document.createElement('img')
+        const id = role.properties?.ID?.rich_text?.[0]?.plain_text
+        icon.src = `./images/roles/${id}.png`
+        item.appendChild(icon)
+
+        const name = document.createElement('h3')
+        name.innerText = role.properties?.["Название"]?.title?.[0]?.text?.content
+        item.appendChild(name) 
+        
+        list.appendChild(item)
+    }
+
+    return list
+}
 
 onInit()
