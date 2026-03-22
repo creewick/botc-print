@@ -13,12 +13,12 @@
 
 @font-face {
     font-family: 'Roboto-Condensed';
-    src: url('/fonts/robotocondensed.ttf') format('truetype-variations')
+    src: url('./fonts/robotocondensed.ttf') format('truetype-variations')
 }
 
 @font-face {
     font-family: 'Petersburg';
-    src: url('/fonts/petersburgcyrillic.ttf') format('truetype-variations')
+    src: url('./fonts/petersburgcyrillic.ttf') format('truetype-variations')
 }
 
 
