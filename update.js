@@ -6,7 +6,7 @@ const ROLES_DB_ID = process.env.ROLES_DB_ID
 const JINXES_DB_ID = process.env.JINXES_DB_ID
 
 async function main() {
-    if (!NOTION_TOKEN || !ROLES_DB_ID || !TYPES_DB_ID || !JINXES_DB_ID) {
+    if (!NOTION_TOKEN || !ROLES_DB_ID || !JINXES_DB_ID) {
         throw new Error('Missing ENV parameters')
     }
 
