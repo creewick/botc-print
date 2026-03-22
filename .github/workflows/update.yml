@@ -1,0 +1,39 @@
+name: Sync Notion Data
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 0 * * *"
+
+permissions:
+  contents: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+
+    env:
+      NOTION_SECRET: ${{ secrets.NOTION_SECRET }}
+      ROLES_DB_ID: ${{ secrets.ROLES_DB_ID }}
+      JINXES_DB_ID: ${{ secrets.JINXES_DB_ID }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.JS
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Run script
+        run: node update.js
+
+      - name: Commit and push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Sync Notion Data"
+          git push
