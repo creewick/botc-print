@@ -14,16 +14,22 @@ const recommendedTravellers = ['thief', 'harlot', 'judge', 'beggar', 'scapegoat'
 async function onInit() {
     const { ids, title } = parseQuery()
     const roles = await getJson('./roles.json')
+    const jinxes = await getJson('./jinxes.json')
     const travellers = filterRoles(roles, recommendedTravellers)
     const filteredRoles = filterRoles(roles, ids)
+    const filteredJinxes = filterJinxes(jinxes, filteredRoles)
     const systemRoles = filterRolesByType(roles, undefined)
+
+    console.log(filteredJinxes)
 
     renderTitle(title)
     getRoleSections(filteredRoles, firstPageTypes).forEach(section => 
         document.getElementsByClassName('page')[0].appendChild(section))
+    document.getElementsByClassName('page')[1].insertBefore(getJinxesSection(filteredRoles, filteredJinxes), document.getElementById('players-count'))
     getRoleSections([...filteredRoles, ...travellers], secondPageTypes).forEach(section => 
         document.getElementsByClassName('page')[1].insertBefore(section, document.getElementById('players-count')))
-    // renderNightOrder([...filteredRoles, ...systemRoles])
+    
+        // renderNightOrder([...filteredRoles, ...systemRoles])
 }
 
 function parseQuery() {
@@ -48,6 +54,12 @@ function filterRoles(roles, ids) {
         .map(id => roles
             .find(role => role?.properties?.ID?.rich_text?.[0]?.plain_text === id))
         .filter(role => !!role)
+}
+
+function filterJinxes(jinxes, roles) {
+    const ids = roles.map(role => role.id)
+    return jinxes.filter(jinx => 
+        jinx?.properties?.["Персонажи"]?.relation.every(x => ids.includes(x.id)))
 }
 
 function filterRolesByType(roles, typeId) {
@@ -78,6 +90,10 @@ function renderRoleType(roles, name, id) {
         section.classList.add('good')
     if (['2bfc6e58-485f-80b4-b28c-d3f87189b821', '2bfc6e58-485f-8059-b37f-d6cffbccbf6c'].includes(id))
         section.classList.add('evil')
+    if (['2bfc6e58-485f-8048-884c-fa29f3dbe5d6'].includes(id))
+        section.classList.add('fabled')
+    if (['2bfc6e58-485f-80d8-87ae-eb92d2bb40b3'].includes(id))
+        section.classList.add('traveller')
   
     section.appendChild(renderTypeTitle(name))
     section.appendChild(renderRoleList(roles))
@@ -130,18 +146,51 @@ function getRoleOrder(index, total) {
     return (index - half) * 2 + 1
 }
 
-function renderTravellers(roles) {
-    if (roles.length === 0) return
+function getJinxesSection(roles, jinxes) {
+    if (jinxes.length === 0) return
 
     const section = document.createElement('section')
-    section.classList.add('roleType', 'traveller')
-    section.style.flexGrow = roles.length;
+    section.classList.add('roleType')
+    section.style.flexGrow = jinxes.length;
   
-    section.appendChild(renderTypeTitle(secondPageTypes['2bfc6e58-485f-80d8-87ae-eb92d2bb40b3']))
-    section.appendChild(renderRoleList(roles))
-    
-    document.getElementsByClassName('page')[1].insertBefore(section, document.getElementById('players-count'))
+    section.appendChild(renderTypeTitle('Правила Джинна'))
+    section.appendChild(renderJinxesList(roles, jinxes))
+
+    return section
 }
+
+function renderJinxesList(roles, jinxes) {
+    const list = document.createElement('ul')
+
+    for (let index = 0; index < jinxes.length; index++) {
+        const jinx = jinxes[index]
+        if (!jinx) continue
+        const item = document.createElement('li')
+        item.classList.add('jinx')
+        item.style.order = getRoleOrder(index, jinxes.length)
+
+        const rolePageIds = jinx?.properties?.["Персонажи"]?.relation?.map(x => x.id)
+        const roleIds = rolePageIds
+            .map(pageId => roles.find(x => x.id === pageId))
+            .map(page => page.properties?.ID?.rich_text?.[0]?.plain_text)
+
+        const icon1 = document.createElement('img')
+        icon1.src = `./images/roles/${roleIds[0]}.png`
+        item.appendChild(icon1)
+
+        const icon2 = document.createElement('img')
+        icon2.src = `./images/roles/${roleIds[1]}.png`
+        item.appendChild(icon2)
+
+        const ability = document.createElement('p')
+        ability.innerText = jinx.properties?.["Правило"]?.title.map(x => x.plain_text).join("")
+        item.appendChild(ability)
+
+        list.appendChild(item)
+    }
+    
+    return list
+} 
 
 function renderNightOrder(roles) {
     const firstNight = getNightOrderList(roles, "Первая ночь порядок")

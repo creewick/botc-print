@@ -2,6 +2,7 @@
     --main-color: #50B;
     --good-color: #06B;
     --evil-color: #A21;
+    --traveller-color: #504;
     --fabled-color: #764;
     --A4-width: 210mm;
     --A4-height: 297mm;
@@ -68,18 +69,22 @@ h1 {
     flex-direction: column;
 }
 .roleType.good h3, #players-count .good {
-    color: #06B;
+    color: var(--good-color);
 }
 .roleType.evil h3, #players-count .evil {
-    color: #A21;
+    color: var(--evil-color);
 }
-#players-count .players {
-    color: #764;
+.roleType.traveller h3 {
+    color: var(--traveller-color);
+}
+.roleType.fabled h3, #players-count .players {
+    color: var(--fabled-color);
 }
 .roleType h2 {
     display: flex;
     text-transform: uppercase;
     font-size: 3.5mm;
+    line-height: 1;
 }
 .roleType h2::after {
     content: '';
@@ -89,7 +94,7 @@ h1 {
     margin-left: 2mm;
     top: 1.4mm;
     
-    height: 0.25mm;
+    height: 1px;
     background: black;
 }
 ul {
@@ -173,4 +178,18 @@ ul {
 #players-count th:first-of-type {
     font-size: 4mm;
     text-align: right;
+}
+li.jinx {
+    display: grid;
+    width: 94mm;
+    grid-template-columns: auto auto 1fr !important;
+    column-gap: 1mm;
+    row-gap: 1mm;
+}
+li.jinx > img:last-of-type {
+    grid-column: 2 !important;
+}
+li.jinx > p {
+    padding-left: 2mm;
+    grid-column: 3 !important;
 }
