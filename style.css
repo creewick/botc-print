@@ -63,6 +63,7 @@ h1 {
     font-size: 3.5mm;
     right: 8mm;
     top: 16mm;
+    white-space: nowrap;
 }
 .roleType {
     display: flex;
@@ -141,6 +142,15 @@ ul {
     font-weight: 300;
     font-size: 3.5mm;
 }
+.roleSetup { 
+    font-weight: 400;
+}
+.roleSetup::before {
+    content: ' [ '
+}
+.roleSetup::after {
+    content: ' ]'
+}
 #options-columns-1:checked ~ .page .roleType li {
     width: 200mm;
     grid-template-columns: 10mm 26mm auto;
@@ -167,7 +177,7 @@ ul {
     width: 170mm;
     margin: 12mm;
     text-align: center;
-    border: 6px double #764;
+    border: 4px double #764;
 }
 #players-count th, #players-count td {
     width: 10mm;
@@ -194,8 +204,9 @@ li.jinx > p {
     grid-column: 3 !important;
 }
 .jinxIcon {
-    width: 6mm;
+    width: 4mm !important;
     position: relative;
-    margin-top: -3mm;
-    margin-bottom: -1.5mm;
+    margin-top: -2mm;
+    margin-bottom: -1mm;
+    margin-left: 1mm;
 }

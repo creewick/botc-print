@@ -143,6 +143,14 @@ function renderRoleList(roles, allRoles, jinxes) {
 
         const ability = document.createElement('p')
         ability.innerText = role.properties?.["Способность"]?.rich_text?.[0]?.plain_text
+        const setupText = role.properties?.["Замены"]?.rich_text?.[0]?.plain_text
+        if (setupText) {
+            const setup = document.createElement('span')
+            setup.innerText = setupText
+            setup.classList.add('roleSetup')
+            ability.appendChild(setup)
+        }
+      
         item.appendChild(ability)
 
         list.appendChild(item)
