@@ -44,6 +44,8 @@ html, body {
 
     break-after: page;
     page-break-after: always;
+
+    overflow: hidden;
 }
 #options-background:checked ~ .page {
     background: #F4F2EB url('./images/textures/paper.webp');
