@@ -26,9 +26,9 @@ async function onInit() {
     renderTitle(title)
     getRoleSections(filteredRoles, firstPageTypes, filteredJinxes).forEach(section => page(1).appendChild(section))
     getRoleSections([...filteredRoles, ...travellers, ...djinn], secondPageTypes).forEach(section => page(2).insertBefore(section, document.getElementById('players-count')))
-    page(2).insertBefore(getJinxesSection(filteredRoles, filteredJinxes), document.getElementById('Странники'))
-    page(3).appendChild(getNightOrderSection([...filteredRoles, ...systemRoles], 'Первая ночь порядок'))
-    page(3).appendChild(getNightOrderSection([...filteredRoles, ...systemRoles], 'Другие ночи порядок'))
+    if (filteredJinxes.length > 0) page(2).insertBefore(getJinxesSection(filteredRoles, filteredJinxes), document.getElementById('Странники'))
+    page(3).appendChild(getNightOrderSection([...filteredRoles, ...systemRoles], 'Первая ночь'))
+    page(3).appendChild(getNightOrderSection([...filteredRoles, ...systemRoles], 'Другие ночи'))
 
 }
 
@@ -221,8 +221,8 @@ function getNightOrderSection(roles, key) {
     if (roles.length === 0) return
 
     const section = document.createElement('section')
-    section.classList.add('roleType', 'nightOrder')
-    if (key === 'Другие ночи порядок')
+    section.classList.add('nightOrder')
+    if (key === 'Другие ночи')
         section.classList.add('rotate180')
     section.style.flexGrow = roles.length;
   
@@ -235,8 +235,8 @@ function getNightOrderSection(roles, key) {
 function renderNightOrderList(roles, key) {
     const list = document.createElement('ul')
     const filteredRoles = roles
-        .filter(a => a?.properties?.[key]?.number !== null)
-        .sort((a, b) => a?.properties?.[key]?.number - b?.properties?.[key]?.number)
+        .filter(a => a?.properties?.[key + ' порядок']?.number !== null)
+        .sort((a, b) => a?.properties?.[key + ' порядок']?.number - b?.properties?.[key + ' порядок']?.number)
 
     for (const role of filteredRoles) {
         const item = document.createElement('li')
@@ -249,6 +249,10 @@ function renderNightOrderList(roles, key) {
         const name = document.createElement('h3')
         name.innerText = role.properties?.["Название"]?.title?.[0]?.text?.content
         item.appendChild(name) 
+
+        const hint = document.createElement('p')
+        hint.innerText = role.properties?.[key + ' подсказка']?.rich_text?.[0]?.plain_text
+        item.appendChild(hint) 
         
         list.appendChild(item)
     }
