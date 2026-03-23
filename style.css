@@ -48,7 +48,7 @@ html, body {
     background: #F4F2EB url('./images/textures/paper.webp');
     background-size: 210mm 297mm;
 }
-#options-stretch:checked ~ .page:first-of-type {
+#options-stretch:checked ~ .page {
     display: flex;
     flex-direction: column;
 }
@@ -101,10 +101,11 @@ ul {
     display: flex;
     flex-grow: 1;
     flex-wrap: wrap;
+    gap: 0 4mm;
 }
 .roleType li {
     display: grid;
-    width: 97mm;
+    width: 94mm;
     grid-template-columns: auto 1fr;
     grid-template-rows: auto auto;
     column-gap: 5mm;
