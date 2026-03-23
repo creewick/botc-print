@@ -75,7 +75,7 @@ h1 {
 .roleType.evil h3, .nightOrder.evil h3, #players-count .evil {
     color: var(--evil-color);
 }
-.roleType.traveller, .nightOrder.traveller h3 {
+.roleType.traveller h3, .nightOrder.traveller h3 {
     color: var(--traveller-color);
 }
 .roleType.fabled h3, #players-count .players {
