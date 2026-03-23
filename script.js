@@ -251,7 +251,7 @@ function renderNightOrderList(roles, key) {
         item.appendChild(name) 
 
         const hint = document.createElement('p')
-        hint.innerText = role.properties?.[key + ' подсказка']?.rich_text?.[0]?.plain_text
+        hint.innerText = role.properties?.[key + ' подсказка']?.rich_text?.map(x => x.plain_text).join("")
         item.appendChild(hint) 
         
         list.appendChild(item)
