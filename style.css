@@ -151,24 +151,24 @@ ul {
 .roleSetup::after {
     content: ' ]'
 }
-#options-columns-1:checked ~ .page .roleType li {
+#options-columns-1:checked ~ .page .roleType li, .nightOrder li {
     width: 200mm;
     grid-template-columns: 10mm 26mm auto;
     column-gap: 1mm;
     row-gap: 0;
     order: initial !important;
 }
-#options-columns-1:checked ~ .page .roleType li img {
+#options-columns-1:checked ~ .page .roleType li img, .nightOrder li img {
     grid-column: 1;
     grid-row: 1;
     width: 8mm;
 }
-#options-columns-1:checked ~ .page .roleType li h3 {
+#options-columns-1:checked ~ .page .roleType li h3, .nightOrder li h3 {
     grid-column: 2;
     grid-row: 1;
     align-self: center;
 }
-#options-columns-1:checked ~ .page .roleType li p {
+#options-columns-1:checked ~ .page .roleType li p, .nightOrder li p {
     grid-column: 3;
     grid-row: 1;
     align-self: center;
@@ -208,5 +208,31 @@ li.jinx > p {
     position: relative;
     margin-top: -2mm;
     margin-bottom: -1mm;
-    margin-left: 1mm;
+    margin-left:.title-page-3 {
+    position: absolute;
+    width: 100%;
+    text-align: center;
+    margin-top: -2mm;
+} 1mm;
+}
+.nightOrder {
+    position: absolute;
+    height: calc(var(--A4-height) - 22mm);
+    width: calc(var(--A4-width) - 16mm);
+}
+.rotate180 {
+    transform: rotate(180deg);
+    right: 8mm;
+    bottom: 8mm;
+}
+
+.title-page-3 {
+    position: absolute;
+    width: 100%;
+    text-align: center;
+    margin-top: -2mm;
+}
+
+.title-page-3.rotate180 {
+    margin-bottom: -2mm;
 }

@@ -22,12 +22,14 @@ async function onInit() {
     const systemRoles = filterRolesByType(roles, undefined)
     const page = (n) => document.getElementsByClassName('page')[n-1]
 
+    document.title = title
     renderTitle(title)
     getRoleSections(filteredRoles, firstPageTypes, filteredJinxes).forEach(section => page(1).appendChild(section))
     getRoleSections([...filteredRoles, ...travellers, ...djinn], secondPageTypes).forEach(section => page(2).insertBefore(section, document.getElementById('players-count')))
     page(2).insertBefore(getJinxesSection(filteredRoles, filteredJinxes), document.getElementById('Странники'))
-    
-        // renderNightOrder([...filteredRoles, ...systemRoles])
+    page(3).appendChild(getNightOrderSection([...filteredRoles, ...systemRoles], 'Первая ночь порядок'))
+    page(3).appendChild(getNightOrderSection([...filteredRoles, ...systemRoles], 'Другие ночи порядок'))
+
 }
 
 function parseQuery() {
@@ -67,7 +69,7 @@ function filterRolesByType(roles, typeId) {
 }
 
 function renderTitle(title) {
-    document.getElementById("script-title").innerText = title ?? 'Сценарий'
+    Array.from(document.getElementsByClassName("script-title")).forEach(x => x.innerText = title ?? 'Сценарий')
 }
 
 function getRoleSections(roles, types, jinxes) {
@@ -215,12 +217,22 @@ function renderJinxesList(roles, jinxes) {
     return list
 } 
 
-function renderNightOrder(roles) {
-    const firstNight = getNightOrderList(roles, "Первая ночь порядок")
-    document.getElementsByClassName('page')[2].appendChild(firstNight)
+function getNightOrderSection(roles, key) {
+    if (roles.length === 0) return
+
+    const section = document.createElement('section')
+    section.classList.add('roleType', 'nightOrder')
+    if (key === 'Другие ночи порядок')
+        section.classList.add('rotate180')
+    section.style.flexGrow = roles.length;
+  
+    section.appendChild(renderTypeTitle(key))
+    section.appendChild(renderNightOrderList(roles, key))
+    
+    return section
 }
 
-function getNightOrderList(roles, key) {
+function renderNightOrderList(roles, key) {
     const list = document.createElement('ul')
     const filteredRoles = roles
         .filter(a => a?.properties?.[key]?.number !== null)
