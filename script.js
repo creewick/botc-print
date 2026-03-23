@@ -18,16 +18,14 @@ async function onInit() {
     const travellers = filterRoles(roles, recommendedTravellers)
     const filteredRoles = filterRoles(roles, ids)
     const filteredJinxes = filterJinxes(jinxes, filteredRoles)
+    const djinn = filteredJinxes.length > 0 ? [roles.find(x => x.id === '2bfc6e58-485f-81c7-b450-de3becf2d115')] : []
     const systemRoles = filterRolesByType(roles, undefined)
-
-    console.log(filteredJinxes)
+    const page = (n) => document.getElementsByClassName('page')[n-1]
 
     renderTitle(title)
-    getRoleSections(filteredRoles, firstPageTypes).forEach(section => 
-        document.getElementsByClassName('page')[0].appendChild(section))
-    document.getElementsByClassName('page')[1].insertBefore(getJinxesSection(filteredRoles, filteredJinxes), document.getElementById('players-count'))
-    getRoleSections([...filteredRoles, ...travellers], secondPageTypes).forEach(section => 
-        document.getElementsByClassName('page')[1].insertBefore(section, document.getElementById('players-count')))
+    getRoleSections(filteredRoles, firstPageTypes, filteredJinxes).forEach(section => page(1).appendChild(section))
+    getRoleSections([...filteredRoles, ...travellers, ...djinn], secondPageTypes).forEach(section => page(2).insertBefore(section, document.getElementById('players-count')))
+    page(2).insertBefore(getJinxesSection(filteredRoles, filteredJinxes), document.getElementById('Странники'))
     
         // renderNightOrder([...filteredRoles, ...systemRoles])
 }
@@ -72,18 +70,19 @@ function renderTitle(title) {
     document.getElementById("script-title").innerText = title ?? 'Сценарий'
 }
 
-function getRoleSections(roles, types) {
+function getRoleSections(roles, types, jinxes) {
     return Object.entries(types).map(([id, name]) => {
         const rolesByType = filterRolesByType(roles, id)
-        return renderRoleType(rolesByType, name, id)
+        return renderRoleType(rolesByType, name, id, roles, jinxes)
     }).filter(x => x)
 }
 
-function renderRoleType(roles, name, id) {
+function renderRoleType(roles, name, id, allRoles, jinxes) {
     if (roles.length === 0) return
 
     const section = document.createElement('section')
     section.classList.add('roleType')
+    section.id = name
     section.style.flexGrow = roles.length;
 
     if (['2bfc6e58-485f-8006-9d07-fe360e067c6b', '2bfc6e58-485f-804b-a4f2-fe76108367bc'].includes(id))
@@ -96,7 +95,7 @@ function renderRoleType(roles, name, id) {
         section.classList.add('traveller')
   
     section.appendChild(renderTypeTitle(name))
-    section.appendChild(renderRoleList(roles))
+    section.appendChild(renderRoleList(roles, allRoles, jinxes))
 
     return section
 }
@@ -108,7 +107,7 @@ function renderTypeTitle(name) {
     return title
 }
 
-function renderRoleList(roles) {
+function renderRoleList(roles, allRoles, jinxes) {
     const list = document.createElement('ul')
 
     for (let index = 0; index < roles.length; index++) {
@@ -125,6 +124,22 @@ function renderRoleList(roles) {
         const name = document.createElement('h3')
         name.innerText = role.properties?.["Название"]?.title?.[0]?.text?.content
         item.appendChild(name)
+
+        if (jinxes) {
+            const roleJinxes = jinxes.filter(x => x.properties?.["Персонажи"]?.relation?.some(r => r.id === role.id))
+            if (roleJinxes.length > 0) console.log(id)
+            
+            for (const jinx of roleJinxes) {
+                const pageId = jinx.properties?.["Персонажи"]?.relation.map(r => r.id).filter(id => id !== role.id)[0]    
+                const jinxId = allRoles.find(x => x.id === pageId)?.properties?.ID?.rich_text?.[0]?.plain_text
+                if (jinxId) {
+                    const icon = document.createElement('img')
+                    icon.classList.add('jinxIcon')
+                    icon.src = `./images/roles/${jinxId}.png`
+                    name.appendChild(icon)
+                }             
+            }
+        }
 
         const ability = document.createElement('p')
         ability.innerText = role.properties?.["Способность"]?.rich_text?.[0]?.plain_text
