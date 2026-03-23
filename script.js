@@ -55,6 +55,8 @@ function renderRoleType(roles, name, id) {
     if (roles.length === 0) return
 
     const section = document.createElement('section')
+    section.classList.add('roleType')
+    section.style.flexGrow = roles.length;
 
     if (['2bfc6e58-485f-8006-9d07-fe360e067c6b', '2bfc6e58-485f-804b-a4f2-fe76108367bc'].includes(id))
         section.classList.add('good')
