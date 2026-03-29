@@ -207,9 +207,9 @@ li.jinx > p {
     grid-column: 3 !important;
 }
 .jinxIcon {
-    width: 4mm !important;
+    width: 6mm !important;
     position: relative;
-    margin-top: -2mm;
+    margin-top: -3mm;
     margin-bottom: -1mm;
     margin-left: 1mm;
 }
