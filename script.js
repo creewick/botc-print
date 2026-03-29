@@ -109,8 +109,23 @@ function renderTypeTitle(name) {
     return title
 }
 
+const roleAbilityTypeOrder = [
+    'В первую ночь',
+    'Каждую ночь',
+    'Каждую ночь *',
+    'В первый день',
+    'Каждый день',
+    'Раз за игру',
+    'Пассивная'
+]
+
 function renderRoleList(roles, allRoles, jinxes) {
     const list = document.createElement('ul')
+
+    roles = roles.sort((a, b) => 
+        roleAbilityTypeOrder.indexOf(a.properties?.['Работает']?.select?.name) - 
+        roleAbilityTypeOrder.indexOf(b.properties?.['Работает']?.select?.name)
+    )
 
     for (let index = 0; index < roles.length; index++) {
         const role = roles[index]
