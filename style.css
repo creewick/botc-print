@@ -114,7 +114,7 @@ ul {
 }
 .roleType li, .nightOrder li {
     display: grid;
-    width: 94mm;
+    width: 95mm;
     grid-template-columns: auto 1fr;
     grid-template-rows: auto auto;
     column-gap: 5mm;
