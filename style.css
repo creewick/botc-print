@@ -34,6 +34,10 @@ html, body {
     padding: 0;
     font-family: 'Petersburg';
 }
+.script-title {
+    color: var(--accent-color);
+    filter: brightness(0.6);
+}
 .page {
     box-sizing: border-box;
     position: relative;
@@ -51,7 +55,7 @@ html, body {
     background: #F4F2EB url('./images/textures/paper.webp');
     background-size: 210mm 297mm;
 }
-#options-stretch:checked ~ .page {
+#options-stretch:checked ~ .page:not(:nth-of-type(2)) {
     display: flex;
     flex-direction: column;
 }
@@ -120,8 +124,11 @@ ul {
     column-gap: 5mm;
     row-gap: 1mm;
 }
-#options-columns-2:checked ~ #options-stretch:not(:checked) ~ .page .roleType li {
+#options-columns-2:checked ~ #options-stretch:not(:checked) ~ .page:not(:nth-of-type(2)) .roleType li {
     padding-bottom: 2mm;
+}
+#options-sort:not(:checked) ~ .page .roleType li {
+    order: unset !important;
 }
 .roleType li > img, .nightOrder li > img {
     grid-column: 1;

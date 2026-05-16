@@ -12,7 +12,7 @@ const secondPageTypes = {
 const recommendedTravellers = ['thief', 'harlot', 'judge', 'beggar', 'scapegoat']
 
 async function onInit() {
-    const { ids, title } = parseQuery()
+    const { ids, title, color } = parseQuery()
     const roles = await getJson('./roles.json')
     const jinxes = await getJson('./jinxes.json')
     const travellers = filterRoles(roles, recommendedTravellers)
@@ -23,6 +23,7 @@ async function onInit() {
     const page = (n) => document.getElementsByClassName('page')[n-1]
 
     document.title = title
+    document.documentElement.style.setProperty('--accent-color', color);
     renderTitle(title)
     getRoleSections(filteredRoles, firstPageTypes, filteredJinxes).forEach(section => page(1).appendChild(section))
     getRoleSections([...filteredRoles, ...travellers, ...djinn], secondPageTypes).forEach(section => page(2).insertBefore(section, document.getElementById('players-count')))
@@ -36,8 +37,9 @@ function parseQuery() {
     const query = new URLSearchParams(window.location.search)
     const ids = query.get('roles')?.split(',')?.map(id => id.trim())
     const title = query.get('title')?.trim()
+    const color = query.get('color')?.trim()
 
-    return ({ ids, title })
+    return ({ ids, title, color })
 }
 
 async function getJson(path) {
@@ -121,8 +123,9 @@ const roleAbilityTypeOrder = [
 
 function renderRoleList(roles, allRoles, jinxes) {
     const list = document.createElement('ul')
+    const sorted = [...roles]
 
-    roles = roles.sort((a, b) => 
+    sorted.sort((a, b) => 
         roleAbilityTypeOrder.indexOf(a.properties?.['Работает']?.select?.name) - 
         roleAbilityTypeOrder.indexOf(b.properties?.['Работает']?.select?.name)
     )
@@ -131,7 +134,8 @@ function renderRoleList(roles, allRoles, jinxes) {
         const role = roles[index]
         if (!role) continue
         const item = document.createElement('li')
-        item.style.order = getRoleOrder(index, roles.length)
+        const sortedIndex = sorted.indexOf(roles[index])
+        item.style.order = getRoleOrder(sortedIndex, roles.length)
 
         const icon = document.createElement('img')
         const id = role.properties?.ID?.rich_text?.[0]?.plain_text
@@ -144,7 +148,6 @@ function renderRoleList(roles, allRoles, jinxes) {
 
         if (jinxes) {
             const roleJinxes = jinxes.filter(x => x.properties?.["Персонажи"]?.relation?.some(r => r.id === role.id))
-            if (roleJinxes.length > 0) console.log(id)
             
             for (const jinx of roleJinxes) {
                 const pageId = jinx.properties?.["Персонажи"]?.relation.map(r => r.id).filter(id => id !== role.id)[0]    
