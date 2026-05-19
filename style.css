@@ -186,6 +186,8 @@ ul {
 #players-count {
     width: 170mm;
     margin: 12mm;
+    position: absolute;
+    bottom: 6mm;
     text-align: center;
     border: 4px double #764;
 }
