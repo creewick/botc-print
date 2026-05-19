@@ -35,8 +35,7 @@ html, body {
     font-family: 'Petersburg';
 }
 .script-title {
-    color: var(--accent-color);
-    filter: brightness(0.6);
+    color: color-mix(in srgb, var(--accent-color) 60%, black);
 }
 .page {
     box-sizing: border-box;
