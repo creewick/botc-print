@@ -59,6 +59,9 @@ html, body {
     display: flex;
     flex-direction: column;
 }
+.traveller ul li {
+    padding-bottom: 4mm;
+}
 h1 {
     margin: 2mm 0;
 }
