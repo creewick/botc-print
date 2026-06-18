@@ -37,6 +37,13 @@ html, body {
 .script-title {
     color: color-mix(in srgb, var(--accent-color) 60%, black);
 }
+.logo {
+    z-index: 300;
+    position: absolute;
+    width: 200mm;
+    top: 70mm;
+    opacity: 0.1;
+}
 .page {
     box-sizing: border-box;
     position: relative;
