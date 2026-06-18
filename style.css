@@ -40,8 +40,9 @@ html, body {
 .logo {
     z-index: 300;
     position: absolute;
-    width: 200mm;
-    top: 70mm;
+    width: 250mm;
+    left: -20mm;
+    top: 50mm;
     opacity: 0.1;
 }
 .page {
@@ -64,6 +65,9 @@ html, body {
 #options-stretch:checked ~ .page:not(:nth-of-type(2)) {
     display: flex;
     flex-direction: column;
+}
+#options-logo:not(:checked) ~ .page .logo {
+    display: none;
 }
 .traveller ul li {
     padding-bottom: 4mm;
