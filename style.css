@@ -169,10 +169,10 @@ ul {
     font-weight: 400;
 }
 .roleSetup::before {
-    content: ' [ '
+    content: ' ['
 }
 .roleSetup::after {
-    content: ' ]'
+    content: ']'
 }
 #options-columns-1:checked ~ .page .roleType li, .nightOrder li {
     width: 200mm;
